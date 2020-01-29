@@ -45,6 +45,7 @@ def show_batch(x,y,shape = None):
     output:
         grid of smaple images
     """
+
     if not shape:
         shape = (int(x.shape[0]**0.5), int(x.shape[0]**0.5))
 

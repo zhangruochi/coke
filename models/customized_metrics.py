@@ -4,7 +4,7 @@ def compute_accuracy(model, data_loader, device):
     corrected_pred, num_examples = 0,0
     model.eval()
     for features, targets in data_loader:
-        features = features.view(-1, 28*28).to(device)
+        features = features.to(device)
         targets = targets.to(device)
         logits, probas = model(features)
         predicted_labels = torch.argmax(probas, dim=1)
