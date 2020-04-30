@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+from matplotlib import patches 
 
 font = {'family': 'serif',
         # 'color':  'darkred',
@@ -60,3 +61,26 @@ def show_batch(x,y,shape = None):
     # plt.subplots_adjust(wspace = 0.2, hspace = 0.5) 
     fig.tight_layout()
     plt.show()
+
+
+
+
+def show_object_box(img, mask):
+    obj_ids = np.unique(mask)[1:]
+    num_objs = len(obj_ids)
+    fig,ax = plt.subplots(1)
+
+    # Display the image
+    ax.imshow(img)
+
+    for i in range(num_objs):
+        pos = np.where(mask == obj_ids[i])
+        x_min = np.min(pos[1])
+        x_max = np.max(pos[1])
+        y_min = np.min(pos[0])
+        y_max = np.max(pos[0])
+        rect = patches.Rectangle((x_min,y_min),x_max - x_min,y_max - y_min,linewidth=1,edgecolor='r',facecolor='none')
+        ax.add_patch(rect)
+    plt.show()
+
+

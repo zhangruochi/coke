@@ -1,6 +1,5 @@
 #import pandas as pd
 import numpy as np
-
 import matplotlib.pyplot as plt
 #import seaborn as sns
 #from sklearn.model_selection import train_test_split
@@ -9,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier 
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.preprocessing import RobustScaler
+from scipy.cluster import hierarchy as hc
 
 
 def lass_selection(X_train,y_train, random_state=42, C = 1, max_features = None):
@@ -103,3 +103,14 @@ def gbt_importance(X_train,y_train,max_depth=10,top_n=15,n_estimators=50,random_
     plt.show() 
     
     return selected_feat
+
+
+def cluster_columns(df, figsize=(10,6), font_size=12):
+    corr = np.round(scipy.stats.spearmanr(df).correlation, 4)
+    corr_condensed = hc.distance.squareform(1-corr)
+    z = hc.linkage(corr_condensed, method='average')
+    fig = plt.figure(figsize=figsize)
+    hc.dendrogram(z, labels=df.columns, orientation='left', leaf_font_size=font_size)
+    plt.show()
+
+

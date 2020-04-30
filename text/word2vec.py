@@ -1,7 +1,7 @@
 import gensim.downloader as api
 import numpy as np
 
-def load_word2vec(word2vec_file = "word2vec-google-news-300"):
+def load_word2vec_gensim(word2vec_file = "word2vec-google-news-300"):
     """ Load Word2Vec Vectors
         Return:
             wv_from_bin: All 3 million embeddings, each lengh 300
@@ -13,7 +13,7 @@ def load_word2vec(word2vec_file = "word2vec-google-news-300"):
 
 
 
-def get_matrix_of_vectors(wv_from_bin, required_words):
+def get_matrix_of_vectors_gensim(wv_from_bin, required_words):
     """ Put the word2vec vectors into a matrix M.
         Param:
             wv_from_bin: KeyedVectors object; the 3 million word2vec vectors loaded from file
@@ -49,7 +49,7 @@ def get_matrix_of_vectors(wv_from_bin, required_words):
     return M, word2Ind
 
 
-def display_pca_scatterplot(model, words=None, sample=0):
+def display_pca_scatterplot_gensim(model, words=None, sample=0):
     if words == None:
         if sample > 0:
             words = np.random.choice(list(model.vocab.keys()), sample)
@@ -64,6 +64,42 @@ def display_pca_scatterplot(model, words=None, sample=0):
     plt.scatter(twodim[:,0], twodim[:,1], edgecolors='k', c='r')
     for word, (x,y) in zip(words, twodim):
         plt.text(x+0.05, y+0.05, word)
+
+
+
+def load_embeddings(path):
+    """ Load the FastText embeddings from the embedding file. """
+    print("Loading pre-trained embeddings")
+    
+    embedding_size = None
+    embeddings = {}
+    with open(path) as f:
+        for line in f:
+            if len(line) > 2:
+                line = line.strip().split()
+                word = line[0]
+                embedding_vec = np.array(line[1:])
+                embeddings[word] = embedding_vec
+    
+    embedding_size = embedding_vec.shape[0]
+    return embeddings, embedding_size
+
+def initialize_embeddings(embeddings, vocabs, embedding_size):
+    """ Use the pre-trained embeddings to initialize an embedding matrix. """
+    print("Initializing embedding matrix")
+    
+    embedding_matrix = np.zeros((len(vocabs), embedding_size))
+    
+    for idx, word in enumerate(vocabs.itos):
+        if word in embeddings:
+            embedding_matrix[idx,:] = embeddings[word]
+    
+    return embedding_matrix
+            
+# EMBEDDING_PATH = "data/embeddings/wiki-news-300d-1M.vec"  
+# embeddings,embedding_size = load_embeddings(EMBEDDING_PATH)
+# embedding_matrix = initialize_embeddings(embeddings, TEXT.vocab, embedding_size)
+# embedding_matrix = torch.from_numpy(embedding_matrix).to(device)
 
 
 
