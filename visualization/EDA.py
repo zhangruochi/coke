@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import torch
+import seaborn as sns
 
 
 def correlaition_matrix(numerical_matrix,selectd_num_features, labels )
@@ -22,6 +22,9 @@ def correlaition_matrix(numerical_matrix,selectd_num_features, labels )
     ax.set_title('features correlation',fontsize=30)
     plt.show()
 
+
+
+
 def plot_function(f, tx=None, ty=None, title=None, min=-2, max=2, figsize=(6,4)):
     x = np.linspace(min,max)
     fig,ax = plt.subplots(figsize=figsize)
@@ -41,3 +44,29 @@ def pivot_plot(index,columns,values):
     # ax1.set_ylabel();
     plt.set_ylim((0,9.3))
 
+
+def pair_plot(df, columns = columns, color_column)
+
+    sns.set(style="ticks", color_codes=True)
+
+    ## make a pair plot
+    columns = columns
+
+    axes = sns.pairplot(df,vars=columns,hue=color_column,palette="husl")
+
+
+def correlation_plot(df, columns):
+    corr = df.loc[:,columns].corr()
+
+    # Generate a mask for the upper triangle
+    mask = np.triu(np.ones_like(corr, dtype=np.bool))
+
+    # Set up the matplotlib figure
+    f, ax = plt.subplots(figsize=(11, 9))
+
+    # Generate a custom diverging colormap
+    cmap = sns.diverging_palette(220, 10, as_cmap=True)
+
+    # Draw the heatmap with the mask and correct aspect ratio
+    sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+                square=True, linewidths=.5, cbar_kws={"shrink": .5})
