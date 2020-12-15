@@ -32,3 +32,41 @@ class AdvancedHairAugmentation:
             img[roi_ho:roi_ho + h_height, roi_wo:roi_wo + h_width] = dst
 
         return img
+
+
+from albumentations.core.transforms_interface import ImageOnlyTransform
+
+class AddBackgroud(ImageOnlyTransform):
+    """Crop randomly the image in a sample.
+
+    Args:
+        output_size (tuple or int): Desired output size. If int, square crop
+            is made.
+    """
+
+    def __init__(self, background_img_paths, p = 0.5):
+        
+        super(AddBackgroud, self).__init__()
+        
+        self.background_img_paths = background_img_paths
+        self.back_img_path = str(random.choice(self.background_img_paths))
+        self.p = p
+        
+    def  apply(self, image, **params):
+        
+        if np.random.rand() >= self.p:
+            return image
+        
+        y1=random.randint(10,110)
+        y2=y1+32
+        x1=random.randint(10,261)
+        x2=x1+32
+        
+        prev_bk = image[0][0].sum()
+        image_bk = cv2.imread(self.back_img_path)[y1:y2, x1:x2]
+        
+        for y in range(32):
+            for x in range(32):
+                if image[y][x].sum() != prev_bk:
+                    image_bk[y][x] = image[y][x]
+        return image_bk

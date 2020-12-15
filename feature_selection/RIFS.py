@@ -11,7 +11,7 @@ Required packages
 Info
 - name   : "zhangruochi"
 - email  : "zrc720@gmail.com"
-- date   : "2017.2.22"
+- date   : "2016.11.22"
 - Version : 1.0.0
 
 Description
@@ -37,18 +37,18 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
 
-# 加载数据集
-def load_data(filename):
-    dataset = pd.read_csv(filename, index_col=0)
-    name_index_dic = get_name_index(dataset)
-    with open("name_index.pkl", "wb") as f:
-        pickle.dump(name_index_dic, f)
+# # 加载数据集
+# def load_data(filename):
+#     dataset = pd.read_csv(filename, index_col=0)
+#     name_index_dic = get_name_index(dataset)
+#     with open("name_index.pkl", "wb") as f:
+#         pickle.dump(name_index_dic, f)
 
-    dataset.columns = list(range(dataset.shape[1]))
-    dataset = dataset.rename(index=name_index_dic)
-    print(dataset.shape)  # (7377, 36)
-    # print(dataset.head())
-    return dataset
+#     dataset.columns = list(range(dataset.shape[1]))
+#     dataset = dataset.rename(index=name_index_dic)
+#     print(dataset.shape)  # (7377, 36)
+#     # print(dataset.head())
+#     return dataset
 
 
 # 创造特征索引和特征名字对应的字典
@@ -149,7 +149,7 @@ def rifs(dataset, labels, seed=0, percent=0.4, stop=3):
     seed_number = seed
     skf = StratifiedKFold(n_splits=5)
     estimator_list = [0, 1, 2, 3, 4]
-#----------------------------------
+    #----------------------------------
 
     dataset = rank_t_value(dataset, labels)
 
